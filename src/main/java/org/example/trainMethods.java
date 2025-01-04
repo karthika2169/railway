@@ -18,11 +18,11 @@ public class trainMethods {
     {
              if(checkseatavailablity(source,dest,seats))
              {
-                 int pnr1=ticket.pnr_no;
-                 bookedticketmap.put(pnr1,new ticket(seats,source,dest,ticketStatus.booked));
-                 System.out.println("Ticket booked successfully.Pnr no for your booked ticket is "+pnr1);
+
+                 bookedticketmap.put(pnrNumber,new ticket(pnrNumber,seats,source,dest,ticketStatus.booked));
+                 System.out.println("Ticket booked successfully.Pnr no for your booked ticket is "+pnrNumber);
                  decreaseseatavailablity(source,dest,seats);
-                 pnr_no++;
+                 pnrNumber++;
              }
              else
              {
@@ -31,15 +31,15 @@ public class trainMethods {
                  else
                  {
                      addtowaitinglist(source,dest,seats);
-                     pnr_no++;
+                     pnrNumber++;
                  }
              }
     }
 
     private static void addtowaitinglist(char source, char dest, int seats) {
-         int pnr2=ticket.pnr_no;
-         wl_map.put(pnr2,new ticket(seats,source,dest,ticketStatus.waitingList));
-        System.out.println("Ticket added to waiting list with pnr no is: "+pnr2);
+
+         wl_map.put(pnrNumber,new ticket(pnrNumber,seats,source,dest,ticketStatus.waitingList));
+        System.out.println("Ticket added to waiting list with pnr no is: "+pnrNumber);
         wl_seats+=seats;
     }
 
