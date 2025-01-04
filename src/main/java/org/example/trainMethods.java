@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
 
 import static org.example.ticket.*;
@@ -86,7 +87,7 @@ public class trainMethods {
           }
           if(seatsToCancel<booked_seats) {
               t.seats = booked_seats - seatsToCancel;
-              storepartiallycancelledseats(pnr_no, seatsToCancel);
+              storepartiallycancelledseats(pnr, seatsToCancel);
               System.out.println("Ticket is partially cancelled with pnr no is " + pnr);
           }
           increaseseatavailablity(s,d,seatsToCancel);
@@ -100,15 +101,17 @@ public class trainMethods {
     }
 
     private static void processWaitingList() {
-         for(ticket waiting:wl_map.values())
+         for(Map.Entry<Integer, ticket> waiting:wl_map.entrySet())
          {
              boolean isValid;
-             char source= waiting.source;
-             char destination= waiting.destination;
-             int seats= waiting.seats;
+             char source= waiting.getValue().source;
+             char destination= waiting.getValue().destination;
+             int seats= waiting.getValue().seats;
+             int pnr_number=waiting.getKey();
              isValid=checkseatavailablity(source,destination,seats);
              if (isValid)
              {
+
                  decreaseseatavailablity(source,destination,seats);
                  wl_seats=wl_seats-seats;
                  updateBookedticketList(waiting);
@@ -116,13 +119,13 @@ public class trainMethods {
          }
     }
 
-    private static void updateBookedticketList(ticket waiting) {
-         int pnr=waiting.pnr_no;
-         waiting.ticketStatus=ticketStatus.booked;
-         bookedticketmap.put(pnr,waiting);
-         wl_map.remove(pnr);
+    private static void updateBookedticketList(Map.Entry<Integer, ticket> waiting) {
+
+         waiting.getValue().ticketStatus=ticketStatus.booked;
+         bookedticketmap.put(waiting.getKey(),waiting.getValue());
+         wl_map.remove(waiting.getKey());
         System.out.println("**********ALERT***********");
-        System.out.println("Booking confirmed for pnr no "+pnr);
+        System.out.println("Booking confirmed for pnr no "+waiting.getKey());
     }
 
     private static void increaseseatavailablity(char source, char dest, int seats)
